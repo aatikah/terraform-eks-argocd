@@ -9,7 +9,7 @@ terraform {
 
 backend "s3" {
     bucket         = "tikah-backend"
-    region         = var.region
+    region         = "us-east-1"
     key            = "argo/terraform.tfstate"
     dynamodb_table = "Lock_State_Files"
     encrypt        = true
