@@ -1,3 +1,20 @@
+# Creates VPC Network
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "5.19.0"
+
+  name = "tikah-vpc"
+  cidr = "10.1.0.0/16"
+
+  azs             = ["us-east-1a", "us-east-1b"]
+  private_subnets = ["10.1.1.0/24", "10.1.2.0/24"]
+  public_subnets  = ["10.1.101.0/24", "10.1.102.0/24"]
+
+  enable_nat_gateway = true
+  single_nat_gateway = true
+}
+
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.31"
@@ -26,21 +43,6 @@ module "eks" {
   depends_on = [module.vpc]
 }
 
-# Creates VPC Network
-module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "5.19.0"
-
-  name = "tikah-vpc"
-  cidr = "10.1.0.0/16"
-
-  azs             = ["us-east-1a", "us-east-1b"]
-  private_subnets = ["10.1.1.0/24", "10.1.2.0/24"]
-  public_subnets  = ["10.1.101.0/24", "10.1.102.0/24"]
-
-  enable_nat_gateway = true
-  single_nat_gateway = true
-}
 
 output "cluster_name" {
   value = module.eks.cluster_name
