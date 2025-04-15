@@ -23,6 +23,7 @@ module "eks" {
       instance_types = ["t3.medium"]
     }
   }
+  depends_on = [module.vpc]
 }
 
 # Creates VPC Network
