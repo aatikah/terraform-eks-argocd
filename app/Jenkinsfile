@@ -26,5 +26,17 @@ pipeline {
             }
         }
 
+        stage('Sonarqube Analysis') {
+            steps {
+                dir('app') {
+                    withSonarQubeEnv('sonar-server') {
+                        sh ''' $SCANNER_HOME/bin/sonar-scanner \
+                        -Dsonar.projectName=mern \
+                        -Dsonar.projectKey=mern '''
+                    }
+                }
+            }
+        }
+
     }
 }
