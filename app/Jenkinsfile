@@ -58,5 +58,13 @@ pipeline {
             }
         }
 
+        stage('Trivy File Scan') {
+            steps {
+                dir('app') {
+                    sh 'trivy fs . > trivyfs.txt'
+                }
+            }
+        }
+
     }
 }
