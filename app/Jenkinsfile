@@ -7,6 +7,8 @@ pipeline {
     environment  {
         SCANNER_HOME=tool 'sonar-scanner'
         AWS_ACCOUNT_ID = credentials('aws_account_id')
+        NVD_API_KEY = credentials('nvd_api')
+        
         AWS_ECR_REPO_NAME = credentials('ecr_repo')
         AWS_DEFAULT_REGION = 'us-east-1'
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/"
@@ -49,7 +51,8 @@ pipeline {
         stage('OWASP Dependency-Check Scan') {
             steps {
                 dir('app') {
-                    dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'owasp-check'
+                    
+                    dependencyCheck additionalArguments: '--scan ./ --nvdApiKey=$NVD_API_KEY --disableYarnAudit --disableNodeAudit', odcInstallation: 'owasp-check' 
                     dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
                 }
             }
