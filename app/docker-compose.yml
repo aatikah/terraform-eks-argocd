@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: ${REPOSITORY_URI}backend:${BUILD_NUMBER}
     ports:
       - "5000:5000"
     volumes:
@@ -20,6 +21,7 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile
+    image: ${REPOSITORY_URI}frontend:${BUILD_NUMBER}
     ports:
       - "3000:3000"
     volumes:

@@ -8,7 +8,6 @@ pipeline {
         SCANNER_HOME=tool 'sonar-scanner'
         AWS_ACCOUNT_ID = credentials('aws_account_id')
         NVD_API_KEY = credentials('nvd_api')
-        
         AWS_ECR_REPO_NAME = credentials('ecr_repo')
         AWS_DEFAULT_REGION = 'us-east-1'
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/"
@@ -61,10 +60,39 @@ pipeline {
         stage('Trivy File Scan') {
             steps {
                 dir('app') {
-                    sh 'trivy fs . > trivyfs.txt'
+                    sh 'trivy fs . > trivyfs.txt 2>&1'
+                    archiveArtifacts artifacts: 'trivyfs.txt', onlyIfSuccessful: true
                 }
             }
         }
+
+        stage("Docker Image Build") {
+            steps {
+                script {
+                    dir('app') {
+                            sh 'docker system prune -f'
+                            sh 'docker container prune -f'
+                            sh 'docker-compose build'
+                    }
+                }
+            }
+        }
+
+        stage("ECR Image Pushing") {
+    steps {
+        script {
+            sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${REPOSITORY_URI}'
+
+            def services = ['backend', 'frontend'] // services you built
+
+            services.each { service ->
+                def imageTag = "${REPOSITORY_URI}${service}:${BUILD_NUMBER}"
+                sh "docker push ${imageTag}"
+            }
+        }
+    }
+}
+
 
     }
 }
