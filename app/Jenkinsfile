@@ -80,20 +80,20 @@ pipeline {
         }
 
         stage("ECR Image Pushing") {
-    steps {
-        script {
-            sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${REPOSITORY_URI}' 
-            
+            steps {
+                script {
+                    //sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${REPOSITORY_URI}' 
+                    sh "aws ecr get-login-password --region ${env.AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${env.REPOSITORY_URI}"
 
-            def services = [${AWS_ECR_REPO_NAME_1}, ${AWS_ECR_REPO_NAME_2}] // services you built
+                    def services = [env.AWS_ECR_REPO_NAME_1, env.AWS_ECR_REPO_NAME_2] // services you built
 
-            services.each { service ->
-                def imageTag = "${REPOSITORY_URI}${service}:${BUILD_NUMBER}"
-                sh "docker push ${imageTag}"
+                    services.each { service ->
+                        def imageTag = "${env.REPOSITORY_URI}${service}:${env.BUILD_NUMBER}"
+                        sh "docker push ${imageTag}"
+                    }
+                }
             }
         }
-    }
-}
 
 
     }
