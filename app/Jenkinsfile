@@ -8,7 +8,8 @@ pipeline {
         SCANNER_HOME=tool 'sonar-scanner'
         AWS_ACCOUNT_ID = credentials('aws_account_id')
         NVD_API_KEY = credentials('nvd_api')
-        AWS_ECR_REPO_NAME = credentials('ecr_repo')
+        AWS_ECR_REPO_NAME_1 = credentials('ecr_repo_1')
+        AWS_ECR_REPO_NAME_2 = credentials('ecr_repo_2')
         AWS_DEFAULT_REGION = 'us-east-1'
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/"
     }
@@ -81,10 +82,10 @@ pipeline {
         stage("ECR Image Pushing") {
     steps {
         script {
-            // sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${REPOSITORY_URI}'
-            sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com'
+            sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${REPOSITORY_URI}' 
+            
 
-            def services = ['backend', 'frontend'] // services you built
+            def services = [${AWS_ECR_REPO_NAME_1}, ${AWS_ECR_REPO_NAME_2}] // services you built
 
             services.each { service ->
                 def imageTag = "${REPOSITORY_URI}${service}:${BUILD_NUMBER}"
