@@ -72,7 +72,7 @@ pipeline {
                     dir('app') {
                             sh 'docker system prune -f'
                             sh 'docker container prune -f'
-                            sh 'docker-compose build'
+                            sh 'docker compose build'
                     }
                 }
             }
