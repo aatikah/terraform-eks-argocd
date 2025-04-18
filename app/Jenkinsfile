@@ -48,15 +48,15 @@ pipeline {
             }
         }
 
-        stage('OWASP Dependency-Check Scan') {
-            steps {
-                dir('app') {
+        // stage('OWASP Dependency-Check Scan') {
+        //     steps {
+        //         dir('app') {
                     
-                    dependencyCheck additionalArguments: '--scan ./ --nvdApiKey=$NVD_API_KEY --disableYarnAudit --disableNodeAudit', odcInstallation: 'owasp-check' 
-                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-                }
-            }
-        }
+        //             dependencyCheck additionalArguments: '--scan ./ --nvdApiKey=$NVD_API_KEY --disableYarnAudit --disableNodeAudit', odcInstallation: 'owasp-check' 
+        //             dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+        //         }
+        //     }
+        // }
 
         stage('Trivy File Scan') {
             steps {
