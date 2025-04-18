@@ -95,6 +95,19 @@ pipeline {
             }
         }
 
+        stage("TRIVY Image Scan") {
+            steps {
+                script {
+                    def services = [AWS_ECR_REPO_NAME_1, AWS_ECR_REPO_NAME_2] // The services you want to scan
+
+                    services.each { service ->
+                        sh "trivy image ${REPOSITORY_URI}${service}:${BUILD_NUMBER} > trivy_${service}_image.txt"
+                    }
+                }
+            }
+        }
+
+
 
     }
 }
