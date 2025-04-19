@@ -19,9 +19,34 @@ spec:
           image: 985539759633.dkr.ecr.us-east-1.amazonaws.com/backend:26
           ports:
             - containerPort: 5000
+          
           env:
             - name: MONGODB_URI
-              value: mongodb://mongo:27017/app
+              valueFrom:
+                secretKeyRef:
+                  name: mern-app-secret
+                  key: MONGODB_URI
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: mern-app-secret
+                  key: JWT_SECRET
+            - name: BRAINTREE_MERCHANT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: mern-app-secret
+                  key: BRAINTREE_MERCHANT_ID
+            - name: BRAINTREE_PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mern-app-secret
+                  key: BRAINTREE_PUBLIC_KEY
+
+            - name: BRAINTREE_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mern-app-secret
+                  key: BRAINTREE_PRIVATE_KEY
             - name: NODE_ENV
               value: production
         - name: service-2
