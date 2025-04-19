@@ -19,7 +19,16 @@ spec:
           image: 985539759633.dkr.ecr.us-east-1.amazonaws.com/backend:26
           ports:
             - containerPort: 5000
+          env:
+            - name: MONGODB_URI
+              value: mongodb://mongo:27017/app
+            - name: NODE_ENV
+              value: production
         - name: service-2
           image: 985539759633.dkr.ecr.us-east-1.amazonaws.com/frontend:26
           ports:
             - containerPort: 3000
+        - name: service-3
+          image: mongo
+          ports:
+            - containerPort: 27017
