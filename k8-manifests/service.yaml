@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mern-app-service
-  namespace: mern-app
+  namespace: kubectl
 spec:
   type: ClusterIP
   selector:
