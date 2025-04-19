@@ -107,6 +107,49 @@ pipeline {
             }
         }
 
+        stage('Checkout Code') {
+            steps {
+                git credentialsId: 'github', url: 'https://github.com/aatikah/terraform-eks-argocd.git'
+            }
+        }
+
+        stage('Update Deployment file') {
+    environment {
+        GIT_REPO_NAME = "terraform-eks-argocd"
+        GIT_USER_NAME = "aatikah"
+    }
+    steps {
+        dir('k8-manifests') {
+            script {
+                def services = [AWS_ECR_REPO_NAME_1, AWS_ECR_REPO_NAME_2]
+
+                services.each { service ->
+                    withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                        // Get current image tag using shell, capture it in Groovy
+                        def imageTag = sh(
+                            script: "grep -oP '(?<=${service}:)[^\\\"]+' deployment.yaml",
+                            returnStdout: true
+                        ).trim()
+
+                        // Use Groovy to construct the sed command
+                        sh "sed -i 's|${service}:${imageTag}|${service}:${BUILD_NUMBER}|' deployment.yaml"
+
+                        // Git commit & push
+                        sh """
+                            git config user.email "abuabdillah5444@gmail.com"
+                            git config user.name "aatikah"
+                            git add deployment.yaml
+                            git commit -m "Update deployment image for ${service} to version ${BUILD_NUMBER}" || echo 'No changes'
+                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git HEAD:main
+                        """
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
 
     }
