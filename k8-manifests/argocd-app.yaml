@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mern-app
+  namespace: argocd
+spec:
+  destination:
+    namespace: mern-app
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: 'https://github.com/aatikah/terraform-eks-argocd'
+    targetRevision: HEAD
+    path: k8-manifests
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

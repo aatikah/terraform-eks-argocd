@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mern-app
+  namespace: mern-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mern-app
+  template:
+    metadata:
+      labels:
+        app: mern-app
+    spec:
+      serviceAccountName: ecr-access-sa
+      containers:
+        - name: service-1
+          image: 985539759633.dkr.ecr.us-east-1.amazonaws.com/backend:26
+          ports:
+            - containerPort: 5000
+        - name: service-2
+          image: 985539759633.dkr.ecr.us-east-1.amazonaws.com/frontend:26
+          ports:
+            - containerPort: 3000
