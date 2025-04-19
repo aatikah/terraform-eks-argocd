@@ -109,15 +109,15 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git credentialsId: 'github', url: 'https://github.com/aatikah/terraform-eks-argocd.git'
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/aatikah/terraform-eks-argocd.git'
             }
         }
 
         stage('Update Deployment file') {
-    environment {
-        GIT_REPO_NAME = "terraform-eks-argocd"
-        GIT_USER_NAME = "aatikah"
-    }
+            environment {
+                GIT_REPO_NAME = "terraform-eks-argocd"
+                GIT_USER_NAME = "aatikah"
+            }
     steps {
         dir('k8-manifests') {
             script {
