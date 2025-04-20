@@ -16,7 +16,7 @@ spec:
       serviceAccountName: ecr-access-sa
       containers:
         - name: service-1
-          image: 985539759633.dkr.ecr.us-east-1.amazonaws.com/backend:32
+          image: 985539759633.dkr.ecr.us-east-1.amazonaws.com/backend:33
           ports:
             - containerPort: 5000
           
@@ -50,7 +50,7 @@ spec:
             - name: NODE_ENV
               value: production
         - name: service-2
-          image: 985539759633.dkr.ecr.us-east-1.amazonaws.com/frontend:32
+          image: 985539759633.dkr.ecr.us-east-1.amazonaws.com/frontend:33
           ports:
             - containerPort: 3000
         - name: service-3
