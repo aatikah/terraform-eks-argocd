@@ -4,7 +4,7 @@ metadata:
   name: mern-app-service
   namespace: kubectl
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: mern-app
   ports:
