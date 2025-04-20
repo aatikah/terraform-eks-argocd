@@ -38,8 +38,8 @@ const Home = () => {
 
   return (
     <Layout
-      title='Tope Page'
-      description='Edited MERN E-commerce App'
+      title='Aatikah Page'
+      description='Edited 2 MERN E-commerce App'
       className='container-fluid'
     >
       <Search />
